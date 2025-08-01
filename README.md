@@ -232,7 +232,7 @@ This project is open source and available under the [MIT License](LICENSE)
 
 We wanted to thank you for gracing us with the opportunity to participate in this program. This month-long series of zoom meetings has provided us with countless resources and bits of knowledge that will follow us throughout our engineering lives. From technical sessions on CircuitPython to professional sessions with professors and alumni, you truly have provided a breadth of valuable resources.
 
-Even more so, we made valuable connections along the way. We were able to have direct relations with Professor Karcher Morris, despite not even being enrolled in UCSD yet. That is such a memorable experience for us. Even the TAs (Nix, Terry, Afraz, and Marco) were extremely enjoyable to seek help and conversation with. Not to mention the fact that the four of us team members were able to meet. We went into the program somewhat alone, but have emerged with new engineering comrades. We even made plans to meet up when school begins.
+Even more so, we made valuable connections along the way. We were able to have direct relations with Professor Karcher Morris, despite not even being enrolled in UCSD yet. That is such a memorable experience for us. Even the TAs (Nix, Terri, Afraz, and Marco) were extremely enjoyable to seek help and conversation with. Not to mention the fact that the four of us team members were able to meet. We went into the program somewhat alone, but have emerged with new engineering comrades. We even made plans to meet up when school begins.
 
 This project is our thank you. In the sentiments of engineering as a whole, we opted to embrace new technologies in the same way you have encouraged us throughout the program.
 
