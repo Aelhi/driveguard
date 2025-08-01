@@ -23,8 +23,8 @@ class SleepDatabase:
         self.connection = psycopg2.connect(
             host="localhost", 
             dbname="DriveGuard", 
-            user="your_username", 
-            password="your_password", 
+            user="postgres", 
+            password="Eliahjose30!", 
             port=5432
             )
         
@@ -129,42 +129,46 @@ class SleepDatabase:
             print("No sleep data to display.")
             return
 
-        # Prepare DataFrame and round timestamps to nearest hour
+        # Prepare DataFrame and extract hour component only (0-23)
         df = pd.DataFrame(rows, columns=['timestamp'])
-        df['hour'] = df['timestamp'].dt.floor('H')  # 'H' = hour
+        df['hour'] = df['timestamp'].dt.hour  # Extract just the hour (0-23)
 
         # Count frequency per hour
         sleep_counts = df['hour'].value_counts().sort_index()
 
-        # X = actual datetime labels for bars
-        x_labels = sleep_counts.index
-        y = sleep_counts.values
-
-        # Convert datetime to numerical (in hours) for trendline fitting
-        hours_since_start = (x_labels - x_labels[0]).total_seconds() / 3600
+        # Create complete hour range (0-23) with zeros for missing hours
+        full_hours = pd.Series(0, index=range(24))
+        full_hours.update(sleep_counts)
+        
+        # X = hours (0-23), Y = counts
+        x_hours = full_hours.index
+        y = full_hours.values
 
         # Plot bar chart
         plt.figure(figsize=(14, 6))
-        plt.bar(x_labels, y, width=0.03, color='skyblue', edgecolor='black', label="Sleep Count (per hour)")
+        plt.bar(x_hours, y, width=0.8, color='skyblue', edgecolor='black', label="Sleep Count (per hour)")
 
-        # Plot trendline if enough data
-        if len(x_labels) >= 3:
-            z = np.polyfit(hours_since_start, y, 2)
+        # Plot linear trendline if enough data
+        if len(sleep_counts) >= 2:  # Need at least 2 points for linear fit
+            z = np.polyfit(x_hours, y, 1)
             p = np.poly1d(z)
-            plt.plot(x_labels, p(hours_since_start), "r--", label="Trendline")
+            trendline_y = p(x_hours)
+            
+            # Ensure trendline doesn't go below zero
+            trendline_y = np.maximum(trendline_y, 0)
+            
+            plt.plot(x_hours, trendline_y, "r--", linewidth=2, label="Trendline")
 
         # Formatting
         plt.title("Driver Sleep Frequency by Hour")
-        plt.xlabel("Time")
+        plt.xlabel("Hour (24-hour format)")
         plt.ylabel("Sleep Occurrences")
         
-        # Format x-axis to show hours properly
-        from matplotlib.dates import DateFormatter, HourLocator
-        plt.gca().xaxis.set_major_locator(HourLocator(interval=1))  # Show every hour
-        plt.gca().xaxis.set_major_formatter(DateFormatter('%H:%M'))  # Format as HH:MM
+        # Set x-axis to show all 24 hours
+        plt.xlim(-0.5, 23.5)
+        plt.xticks(range(0, 24, 2))  # Show every 2 hours: 0, 2, 4, 6, ..., 22
         
-        plt.xticks(rotation=45)
-        plt.grid(True)
+        plt.grid(True, alpha=0.3)
         plt.legend()
         plt.tight_layout()
         plt.show()
